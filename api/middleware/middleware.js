@@ -27,8 +27,20 @@ const validateID = async (req,res,next) => {
   }
 }
 
+const validateBody = (req,res,next) => {
+  const data = req.body
+
+  if(!data.project_id || !data.description || !data.notes){
+    res.status(400).json({message: 'misisng requird filieds'})
+  }else{
+    next()
+  }
+
+}
+
 
 module.exports = {
   logger,
-  validateID
+  validateID,
+  validateBody
 }

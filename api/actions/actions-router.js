@@ -2,7 +2,7 @@
 const express = require('express')
 const Actions = require('./actions-model')
 
-const {validateID} = require('../middleware/middleware')
+const {validateID, validateBody} = require('../middleware/middleware')
 
 const router = express.Router()
 
@@ -16,12 +16,25 @@ router.get('/', (req,res,next) => {
 // [GET] /api/actions/:id
 router.get('/:id',validateID, (req,res) => {
   res.json(req.actionD)
-
 })
 
 // [POST] /api/actions
-router.post('/', (req,res) => {
-  res.send('actions post request')
+router.post('/',validateBody, async (req,res, next) => {
+
+  try {
+
+    const data = await Actions.insert(req.body)
+
+    if(!data){
+      res.status(404).json({message: 'action not posted'})
+    }else{
+      res.status(200).json(data)
+    }
+
+  } catch (err) {
+    next(err)
+  }
+
 })
 
 // [PUT] /api/actions/:id
