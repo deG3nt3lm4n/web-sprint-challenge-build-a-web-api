@@ -27,8 +27,22 @@ router.post('/',validateProjectBody, (req,res,next) => {
 })
 
 // [PUT] /api/projects/:id
-router.put('/:id', (req,res) => {
-  res.send('put request in projects')
+router.put('/:id',validateProjectId, validateProjectBody, async (req,res,next) => {
+
+  try {
+
+    const data = await Projects.update(req.params.id, req.body)
+
+    if(!data){
+      res.status(400).json({message: 'data not valid to update'})
+    }else{
+      res.status(200).json(data)
+    }
+
+  } catch (error) {
+    next(error)
+  }
+
 })
 
 // [DELETE] /api/projects/:id
