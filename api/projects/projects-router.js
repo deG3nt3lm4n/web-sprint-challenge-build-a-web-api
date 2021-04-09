@@ -7,6 +7,8 @@ const router = express.Router()
 // [GET] /api/projects
 router.get('/', (req,res) => {
   res.send('get request projects')
+
+
 })
 
 // [GET] /api/projects/:id

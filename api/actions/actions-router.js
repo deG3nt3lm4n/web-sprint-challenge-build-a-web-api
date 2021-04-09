@@ -1,18 +1,22 @@
 // Write your "actions" router here!
 const express = require('express')
-const { route } = require('../projects/projects-router')
 const Actions = require('./actions-model')
+
+const {validateID} = require('../middleware/middleware')
 
 const router = express.Router()
 
 // [GET] /api/actions
-router.get('/', (req,res) => {
-  res.send('actions get request')
+router.get('/', (req,res,next) => {
+  Actions.get()
+    .then(response => res.status(200).json(response))
+    .catch(err => next(err))
 })
 
 // [GET] /api/actions/:id
-router.get('/:id', (req,res) => {
-  res.send('action get with id')
+router.get('/:id',validateID, (req,res) => {
+  res.json(req.actionD)
+
 })
 
 // [POST] /api/actions
