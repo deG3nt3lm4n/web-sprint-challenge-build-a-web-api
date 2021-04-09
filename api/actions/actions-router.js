@@ -50,7 +50,6 @@ router.put('/:id',validateID,validateBody, async (req,res, next) => {
       res.status(201).json(data)
     }
 
-
   } catch (err) {
     next(err)
   }
@@ -59,8 +58,15 @@ router.put('/:id',validateID,validateBody, async (req,res, next) => {
 })
 
 //[DELETE] /api/actions/:id
-router.delete('/id', (req,res) => {
-  res.send('actions delete request')
+router.delete('/:id',validateID, async(req,res,next) => {
+  const {id} = req.params
+  try {
+    await Actions.remove(id)
+    res.json(req.actionD)
+  } catch (error) {
+    next(error)
+  }
+
 })
 
 
