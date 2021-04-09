@@ -38,8 +38,24 @@ router.post('/',validateBody, async (req,res, next) => {
 })
 
 // [PUT] /api/actions/:id
-router.put('/:id', (req,res) => {
-  res.send('actions put request')
+router.put('/:id',validateID,validateBody, async (req,res, next) => {
+
+  try {
+
+    const data = await Actions.update(req.params.id, req.body )
+
+    if(!data){
+      res.status(404).json({message: 'data was not able to change'})
+    }else{
+      res.status(201).json(data)
+    }
+
+
+  } catch (err) {
+    next(err)
+  }
+
+
 })
 
 //[DELETE] /api/actions/:id
