@@ -46,13 +46,34 @@ router.put('/:id',validateProjectId, validateProjectBody, async (req,res,next) =
 })
 
 // [DELETE] /api/projects/:id
-router.delete('/:id', (req,res) => {
-  res.send('delete request in projects')
+router.delete('/:id',validateProjectId, async (req,res,next) => {
+  try {
+    await Projects.remove(req.params.id)
+    res.send(req.projectD)
+  } catch (error) {
+    next(error)
+  }
 })
 
 // [GET] /api/projects/:id/actions
-router.get('/:id/actions', (req,res) => {
-  res.send('reciving a list of actoins from project')
+router.get('/:id/actions',validateProjectId, async (req,res,next) => {
+
+  const {id} = req.params
+
+  try {
+
+    const data = await Projects.getProjectActions(id)
+
+    if(!data){
+      res.status(404).json({message: 'sorry project has no actions'})
+    }else{
+      res.status(200).json(data)
+    }
+
+  } catch (error) {
+    next(error)
+  }
+
 })
 
 
